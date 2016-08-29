@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -64,6 +65,9 @@ public class OrderController {
                                                    @RequestParam(required=false) @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  Date endDate) {
         logger.info("Searching order");
         try {
+            if(StringUtils.isEmpty(status) && startDate == null && endDate ==null) {
+                throw new Exception("Atleast ne search param is mandatory");
+            }
             Response<List<OrderDetail>> response = new Response<List<OrderDetail>>();
             List<OrderDetail> orderList = orderService.searchOrder(status, startDate, endDate);
             response.setPayload(orderList);

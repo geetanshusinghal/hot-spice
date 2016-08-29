@@ -20,7 +20,7 @@
     </appender>
 
 
-    <logger name="com.track">
+    <logger name="com.hotspice">
         <level value="ALL"/>
     </logger>
 

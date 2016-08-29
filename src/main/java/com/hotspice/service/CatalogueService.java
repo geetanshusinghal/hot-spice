@@ -74,13 +74,19 @@ public class CatalogueService {
         return dish;
     }
 
-    public List<Dish> searchDish(String searchType, String searchValue) {
+    public List<Dish> searchDish(String searchType, String searchValue) throws Exception {
         try {
             List<Dish> dishList = new ArrayList<Dish>();
             if("category".equalsIgnoreCase(searchType)) {
+                if(StringUtils.isEmpty(searchValue)) {
+                    throw new Exception("Search value param can't be empty for search type category");
+                }
                 Category category = getCategoryByName(searchValue);
                 dishList = dishDao.getDishByCategory(category);
             } else if("dish_name".equalsIgnoreCase(searchType)) {
+                if(StringUtils.isEmpty(searchValue)) {
+                    throw new Exception("Search value param can't be empty for search type dish_name");
+                }
                 Dish dish = dishDao.getDishByName(searchValue);
                 dishList.add(0, dish);
             } else if("last_order".equalsIgnoreCase(searchType)) {
@@ -97,8 +103,8 @@ public class CatalogueService {
             return dishList;
         } catch (Exception e) {
             logger.error("error while searching....... "  + e);
+            throw new Exception(e.getMessage());
         }
-        return null;
     }
 
     private Category createCategoryObject(CategoryRequest categoryRequest) {
